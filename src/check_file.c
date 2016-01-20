@@ -6,7 +6,7 @@
 /*   By: pmartine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/11 15:53:02 by pmartine          #+#    #+#             */
-/*   Updated: 2016/01/18 15:36:09 by pmartine         ###   ########.fr       */
+/*   Updated: 2016/01/20 14:39:31 by qduperon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,11 @@
 
 static void		ft_bzero_tetriminos(char **tetriminos)
 {
-	int		i;
+	int				i;
 
-	i = 0;
-	while (i < 26)
-	{
-		*tetriminos = NULL;
-		tetriminos++;
-		i++;
-	}
+	i = -1;
+	while (++i < 26)
+		tetriminos[i] = NULL;
 }
 
 static char		**ft_read_file(int fd)
@@ -38,67 +34,62 @@ static char		**ft_read_file(int fd)
 		return (NULL);
 	ft_bzero_tetriminos(tetriminos);
 	ft_bzero(buf, 546);
-	if ((read(fd, buf, 546) < 0) || buf[0] == '\0')
+	if (read(fd, buf, 546) < 0)
+		return (NULL);
+	if (ft_strlen(buf) < 20)
 		return (NULL);
 	while (buf[j] != '\0')
 	{
-		if ((ft_strlen(buf) >= 20))
-			tetriminos[i] = ft_strsub(buf, 21 * i, 21);
-		else
-			return (NULL);
+		tetriminos[i] = ft_strsub(buf, 21 * i, 21);
 		j = j + (unsigned int)ft_strlen(tetriminos[i]);
-		tetriminos[i][ft_strlen(tetriminos[i])] = '\0';
-		i++;
+		++i;
 	}
+	if (tetriminos[i - 1][20] == '\n')
+		return (NULL);
 	return (tetriminos);
 }
 
 static int		check_tetriminos(char **tetriminos)
 {
-	int			i;
+	int				i;
+	int				n;
 
 	while (*tetriminos != NULL)
 	{
 		i = 0;
-		if (*(tetriminos + 1) == NULL)
+		n = 0;
+		while ((*tetriminos)[i] != '\0')
 		{
-			if (ft_strlen(*tetriminos) != 20)
+			if ((i + 1) % 5 == 0 && (*tetriminos)[i] == '\n')
+				i++;
+			if ((*tetriminos)[i] != '.' && (*tetriminos)[i] != '#' && i < 20)
 				return (0);
+			++i;
 		}
-		else if (ft_strlen(*tetriminos) != 21)
-			return (0);
-		while ((*tetriminos)[i])
-		{
-			if ((*tetriminos)[i] != '.' && (*tetriminos)[i] != '#' \
-					&& (i + 1) % 5 != 0 && (i + 1) % 21 != 0)
-				return (0);
-			else if ((*tetriminos)[i] != '\n' && ((i + 1) % 5 == 0 || \
-						(i + 1) % 21 == 0))
-				return (0);
-			i++;
-		}
-		tetriminos++;
+		++tetriminos;
 	}
 	return (1);
 }
 
 static int		parse_tetriminos(char **tetriminos)
 {
-	int			j;
-	char		letter;
+	int				i;
+	char			letter;
 
-	j = 0;
+	i = 0;
 	letter = 'a';
-	while (*tetriminos)
+	while (*tetriminos != NULL)
 	{
-		j = 0;
-		while ((*tetriminos)[j] && (*tetriminos)[j] != '#')
-			j++;
-		if ((*tetriminos)[j] && ((ft_counthash(*tetriminos, j) != 4) || \
-					(ft_istetriminos(*tetriminos, j, letter) != 4)))
+		i = 0;
+		while ((*tetriminos)[i] && (*tetriminos)[i] != '#')
+			++i;
+		if ((*tetriminos)[i] && ft_istetriminos(*tetriminos, i, letter) != 4)
 			return (0);
-		letter++;
-		tetriminos++;
+		while ((*tetriminos)[i++])
+			if ((*tetriminos)[i] == '#')
+				return (0);
+		++letter;
+		++tetriminos;
 	}
 	return (1);
 }
@@ -110,12 +101,12 @@ char			**ft_check_file(int fd)
 	tetriminos = ft_read_file(fd);
 	if (!tetriminos)
 		return (NULL);
-	if (check_tetriminos(tetriminos) == 0)
+	if (!check_tetriminos(tetriminos))
 	{
 		ft_clear_tab(tetriminos);
 		return (NULL);
 	}
-	if (parse_tetriminos(tetriminos) == 0)
+	if (!parse_tetriminos(tetriminos))
 	{
 		ft_clear_tab(tetriminos);
 		return (NULL);

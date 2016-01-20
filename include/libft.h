@@ -6,7 +6,7 @@
 /*   By: qduperon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/27 10:15:14 by qduperon          #+#    #+#             */
-/*   Updated: 2015/12/15 20:29:42 by pmartine         ###   ########.fr       */
+/*   Updated: 2016/01/19 22:56:55 by pmartine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
+# include <stdlib.h>
 
 typedef struct		s_list
 {
@@ -45,7 +46,7 @@ char				*ft_strtolower(char *str);
 char				*ft_strtoupper(char *str);
 char				*ft_strtrim(const char *s);
 int					ft_atoi(const char *str);
-int					ft_clear_tab(char **tab);
+void				ft_clear_tab(char **tab);
 int					ft_isalnum(int c);
 int					ft_isalpha(int c);
 int					ft_isascii(int c);
@@ -65,7 +66,7 @@ size_t				ft_strlen(const char *src);
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 t_list				*ft_lstnew(const void *content, size_t content_size);
 void				ft_bzero(void *s, size_t n);
-void				ft_lstadd(t_list **alst, t_list *new);
+void				ft_lstadd(t_list **alst, t_list *newlst);
 void				ft_lstdel(t_list **alist, void (*del)(void *, size_t));
 void				ft_lstdelone(t_list **alst, void (*f)(void *, size_t));
 void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));

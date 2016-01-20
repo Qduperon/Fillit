@@ -6,13 +6,13 @@
 /*   By: pmartine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/11 19:57:01 by pmartine          #+#    #+#             */
-/*   Updated: 2016/01/18 15:35:12 by pmartine         ###   ########.fr       */
+/*   Updated: 2016/01/19 22:07:23 by pmartine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-static int	ft_error(void)
+static void	ft_error(void)
 {
 	ft_putendl("error");
 	exit(1);
@@ -29,17 +29,15 @@ int			main(int argc, char **argv)
 	if ((fd = open(argv[1], O_RDONLY)) < 0)
 		ft_error();
 	tetriminos = ft_check_file(fd);
-	if (!tetriminos)
-		ft_error();
 	if (close(fd) < 0)
-		exit(1);
+		ft_error();
 	if (tetriminos == NULL)
 		ft_error();
 	solution = ft_resolve(tetriminos);
-	if (!solution)
+	if (solution == NULL)
 		ft_error();
 	ft_putstr(solution);
 	ft_clear_tab(tetriminos);
 	free(solution);
-	exit(0);
+	return (0);
 }

@@ -6,7 +6,7 @@
 #    By: qduperon <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/27 11:29:17 by qduperon          #+#    #+#              #
-#    Updated: 2016/01/18 14:54:36 by pmartine         ###   ########.fr        #
+#    Updated: 2016/01/20 18:57:25 by qduperon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -151,7 +151,7 @@ SRC = src/main.c \
 
 OBJ_LIB = $(SRC_LIB:.c=.o)
 
-FLAGS = -Werror -Wextra -Wall
+FLAGS = -Werror -Wextra -Wall -fsanitize=address
 
 all: $(NAME_LIB) $(NAME)
 

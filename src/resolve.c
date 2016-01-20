@@ -6,7 +6,7 @@
 /*   By: pmartine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/17 17:44:26 by pmartine          #+#    #+#             */
-/*   Updated: 2016/01/18 14:32:50 by pmartine         ###   ########.fr       */
+/*   Updated: 2016/01/19 22:42:12 by pmartine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 static char		*ft_extend_square(char **tetriminos, char *solution, int width)
 {
 	free(solution);
-	if (!(solution = ft_strnew((((size_t)width + 2) * ((size_t)width + 1)))))
+	if ((solution = ft_strnew((width + 2) * (width + 1))) == NULL)
 		return (NULL);
-	ft_init_solution(solution, width);
+	ft_init_solution(solution, width + 1);
 	ft_reset_all_tetriminos(tetriminos);
 	return (solution);
 }
 
-static int		ft_fill_tetriminos(char *tetri, int i, char *solution, int j)
+static int		ft_fill_tetriminos(char *tetris, int i, char *solution, int j)
 {
 	int		hash;
 	int		length;
@@ -30,38 +30,38 @@ static int		ft_fill_tetriminos(char *tetri, int i, char *solution, int j)
 	hash = 0;
 	length = 0;
 	while (solution[length] != '\n')
-		length++;
-	length++;
+		++length;
+	++length;
 	if (i >= 0 && i < 20 && j >= 0 && j < (length * (length - 1)) && \
-	tetri[i] >= 'a' && solution[j] == '.')
+	tetris[i] >= 'a' && solution[j] == '.')
 	{
-		tetri[i] = tetri[i] - 32;
-		solution[j] = tetri[i];
-		hash++;
-		hash = hash + ft_fill_tetriminos(tetri, i + 1, solution, j + 1);
-		hash = hash + ft_fill_tetriminos(tetri, i + 5, solution, j + length);
-		hash = hash + ft_fill_tetriminos(tetri, i - 1, solution, j - 1);
+		tetris[i] = tetris[i] - 32;
+		solution[j] = tetris[i];
+		++hash;
+		hash = hash + ft_fill_tetriminos(tetris, i + 1, solution, j + 1);
+		hash = hash + ft_fill_tetriminos(tetris, i + 5, solution, j + length);
+		hash = hash + ft_fill_tetriminos(tetris, i - 1, solution, j - 1);
 	}
 	return (hash);
 }
 
-static int		ft_filler(char *tetri, char *sol, int st, char letter)
+static int		ft_filler(char *tetris, char *sol, int start, char letter)
 {
 	int		index;
 	int		j;
 
 	index = 0;
-	while (!ft_isalpha(tetri[index]))
-		index++;
-	if (ft_fill_tetriminos(tetri, index, sol, st) == 4)
+	while (!ft_isalpha(tetris[index]))
+		++index;
+	if (ft_fill_tetriminos(tetris, index, sol, start) == 4)
 		return (1);
-	ft_reset_tetriminos(tetri);
+	ft_reset_tetriminos(tetris);
 	j = 0;
 	while (sol[j])
 	{
 		if (sol[j] == letter)
 			sol[j] = '.';
-		j++;
+		++j;
 	}
 	return (0);
 }
@@ -77,7 +77,7 @@ static int		ft_solver(char **tetriminos, char **solution, int index)
 	cpy_solution = ft_strdup(*solution);
 	while ((*solution)[i])
 	{
-		if (!ft_filler(tetriminos[index], *solution, i, 'A' + (char)index))
+		if (!ft_filler(tetriminos[index], *solution, i, 'A' + index))
 			i++;
 		else
 		{
@@ -103,18 +103,18 @@ char			*ft_resolve(char **tetriminos)
 	item = 0;
 	width = 0;
 	while (tetriminos[item])
-		item++;
+		++item;
 	item = item * 4;
 	while (width * width < item)
-		width++;
-	if (!(solution = ft_strnew(((size_t)width * ((size_t)width + 1)))))
+		++width;
+	if ((solution = ft_strnew(width * (width + 1))) == NULL)
 		return (NULL);
 	ft_init_solution(solution, width);
 	while (!ft_solver(tetriminos, &solution, 0))
 	{
-		if (!(solution = ft_extend_square(tetriminos, solution, width)))
+		if ((solution = ft_extend_square(tetriminos, solution, width)) == NULL)
 			return (NULL);
-		width++;
+		++width;
 	}
 	return (solution);
 }

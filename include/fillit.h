@@ -6,7 +6,7 @@
 /*   By: pmartine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/13 16:38:23 by pmartine          #+#    #+#             */
-/*   Updated: 2015/12/18 16:40:24 by pmartine         ###   ########.fr       */
+/*   Updated: 2016/01/19 22:57:19 by pmartine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 # include "libft.h"
 # include <fcntl.h>
-# include <stdlib.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 
 char	**ft_check_file(int fd);
 int		ft_istetriminos(char *tetriminos, int i, char letter);
-int		ft_counthash(char *tetriminos, int i);
 char	*ft_resolve(char **tetriminos);
 void	ft_reset_tetriminos(char *tetriminos);
 void	ft_reset_all_tetriminos(char **tetriminos);
