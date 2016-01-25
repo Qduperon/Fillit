@@ -6,7 +6,7 @@
 /*   By: pmartine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/11 19:37:49 by pmartine          #+#    #+#             */
-/*   Updated: 2016/01/19 22:52:40 by pmartine         ###   ########.fr       */
+/*   Updated: 2016/01/20 18:35:07 by pmartine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,15 @@ void	ft_reset_tetriminos(char *tetriminos)
 			tetriminos[i] = tetriminos[i] + 32;
 		++i;
 	}
+}
+
+void	ft_bzero_tetriminos(char **tetriminos)
+{
+	int		i;
+
+	i = -1;
+	while (++i < 26)
+		tetriminos[i] = NULL;
 }
 
 void	ft_reset_all_tetriminos(char **tetriminos)
